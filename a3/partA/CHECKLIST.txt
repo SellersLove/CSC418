@@ -1,0 +1,54 @@
+-------------------------------------
+Assignment 3 Checklist/Grading sheet
+-------------------------------------
+
+Name: Rui Ji
+Student ID: 1000340918
+
+----------------------------------------------------------------------------------
+A. PLEASE ANSWER THE FOLLOWING QUESTIONS (your assignment will not be graded otherwise!)
+
+  
+1. I verify that I completed this assignment according to the 
+   Academic Honesty policy stated in 
+   http://www.cs.toronto.edu/~kyros/courses/418/policy.2010f.html
+
+   _X_Yes   ___No
+
+
+2. I collaborated on this assignment with another student 
+   (see http://www.cs.toronto.edu/~kyros/courses/418/policy.2010f.html for
+    policy on assignments done in collaboration)
+
+   ___Yes   _X_No
+
+   If you checked yes, please supply the following
+
+       Student name:  Rui Ji
+       Portion(s) of assignment completed by that student (see checklist below)
+
+-----------------------------------------------------------------------------------------
+
+B. PLACE AN (X) IN FRONT OF PORTIONS OF THE ASSIGNMENT THAT YOU COMPLETED IN FULL.
+   
+   If a portion of the assignment was not completed fully, please provide 
+   additional information so that we can determine whether or not you are eligible
+   for partial credit. THE MORE INFORMATION YOU SUPPLY (EG. FILE WHICH CONTAINS
+   PARTIAL CODE, FUNCTION NAME, ETC, SUGGESTIONS ON WHERE AND WHAT TO LOOK FOR IN 
+   YOUR PARTIAL IMPLEMENTATION, DETAILED COMMENTS IN YOUR CODE, ETC) THE MORE LIKELY IT IS 
+   WE WILL BE ABLE TO MAKE AN ACCURATE ASSESSMENT
+
+   
+_X_   (10 points) Part 1a     Ray casting
+                  
+_X_   (20 points) Part 1b     Ray-sphere intersection
+
+_X_   (15 points) Part 1c     Ray-square intersection
+
+_X_   (15 points) Part 1d     Phong shading (ambient, diffuse, and specular components)
+                  
+_X_   ( 5 points) Part 1e     Coding style
+
+_X_   (10 points) Part 1f     Written report
+
+-------------------------------------------------------------------------------- 

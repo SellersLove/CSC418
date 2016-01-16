@@ -1,0 +1,87 @@
+// You can copy these examples into the "void display(void)"
+// function in after the comments say "TODO".
+// This function is where the scene is rendered from (as it says
+// in the comments).
+// NOTE: Remember that just how multiple transformation matrices
+//       are written as multiplications from left to right, but
+//       applied from right to left to the point/objects, the code
+//       and glTransformations are written from the bottom up.
+//       It's weird, I know.
+
+// --------------------------------------------------------------------
+
+// The face example from CSC418 Winter 2013 Midterm Question 2.
+// Test and solution are on the webpage.
+// NOTE: You have to provide your own drawFace function.
+//       See example code from drawSquare and glBegin reference online.
+
+    glPushMatrix();
+      
+      // Transform the face into the required position.
+      
+       // Move the face to the proper position.
+       glTranslatef(100.0, 100.0, 0.0);
+       // Rotate the face onto the side.
+       glRotatef(90.0, 0.0, 0.0, 1.0);
+       // Scale the face (and mirror it along the y-axis).
+       glScalef(-2.0, 2.0, 1.0);
+      // Translate the centre of the face to the origin.
+      glTranslatef(-50.0, -50.0, 0.0);
+    
+      // Set up the question.
+    
+      // Set the face in the initial position.
+      glTranslatef(50.0,50.0,0.0);
+      // Make the face yellow.
+      glColor3f(1.0,1.0,0.0);
+      // Draw the face.
+      drawFace(50.0); // Face has radius 50.
+    
+    glPopMatrix();
+    
+// --------------------------------------------------------------------
+
+// Setting up the x,y axes to use as a reference point for seeing how
+// things move. Essentially, two really long line segments are drawn
+// along both the x and y axes.
+// NOTE: Can also use glBegin(GL_LINES) since we are making line
+//       segments.
+    
+    glPushMatrix();
+    
+      // Make the axes black.
+      glColor3f(0.0, 0.0, 0.0);
+      // x-axis.
+      glBegin(GL_LINE_STRIP); 
+        glVertex2d(-1000.0,0.0);
+	glVertex2d(1000.0,0.0);
+      glEnd();
+      // y-axis.
+      glBegin(GL_LINE_STRIP);
+        glVertex2d(0.0,-1000.0);
+	glVertex2d(0.0,1000.0);
+      glEnd();
+      
+    glPopMatrix();
+    
+// --------------------------------------------------------------------
+    
+// Make an N sided polygon by specifying N vertices.
+// GL_POLYGON makes a solid coloured polygon.
+// GL_LINE_LOOP makes just the outlines (edges) of the polygon.
+// GL_LINE_STRIP is like line_loop but doesn't connect the
+//   first and last vertices.
+  
+    glPushMatrix();
+    
+      // Make the polygon white.
+      glColor3f(1.0, 1.0, 1.0);
+      // Draw a 4-sided polygon by specifying 4 vertices.
+      glBegin(GL_POLYGON);
+        glVertex2d(100.0, 0.0);
+        glVertex2d(20.0, -70.0);
+        glVertex2d(-10.0, -30.0);
+        glVertex2d(30.0, 30.0);
+      glEnd();
+    
+    glPopMatrix();

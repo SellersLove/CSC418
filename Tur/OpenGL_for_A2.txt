@@ -1,0 +1,88 @@
+Tutorial 5
+
+Light and 3D Objects in OpenGL
+==============================
+
+Drawing Objects
+---------------
+
+A 2D object is made by specifying its vertices and OpenGL will then make an outline or fill in the object as you specify. A 3D objects is NOT made by specifying the vertices and having OpenGL fill the interior. A 3D object is made by specifying the vertices of each 2D face of the 3D object and then these faces are all transformed together. This gives the impression that a 3D object is being transformed while in reality it is collection of 2D objects being transformed together.
+
+For example, glBegin(GL_QUADS) will take a multiple of 4 vertices and create a quadrilateral for every 4 vertices given. To create a cube, inside of glBegin(GL_QUADS) and glEnd() you would use 4 of glVertex3f(x,y,z) for one face and another 5*4 vertices to create the other 5 faces. This example is provided in the starter code for A2.
+
+Before creating polygons (in 2D or 3D) you can specify whether to make them wireframe (outline only) or filled by specifying the current "polygon creation" state. This is done by:
+glPolygonMode(GL_FRONT_AND_BACK,GL_LINE) for wireframe, and
+glPolygonMode(GL_FRONT_AND_BACK,GL_FILL) for filled.
+The parameter "GL_FRONT_AND_BACK" will make the polygon either wireframe or filled when looking at its front or its back. It is possible to make a polygon filled when looking at it from the front and wireframe when looking at it from the back by saying:
+glPolygonMode(GL_FRONT,GL_FILL);
+glPolygonMode(GL_BACK,GL_LINE);
+
+The front and back side of a polygon (also how the polygon interacts with light) is determined by the normal of the surface on each point of the polygon. To specify the normal for a polygon, you assign a normal to each vertex and tell OpenGL how to interpolate the values across the interior of the polygon.
+To assign the normal=(nx,ny,nz) to the vertex=(x,y,z) you would write:
+glNormal3f(nx,ny,nz);
+glVertex3f(x,y,z);
+
+The simplest way to interpolate the vertex normals to the surface is with:
+glShadeModel(GL_FLAT);
+The normal of one of the vertices will be used as the normal for the whole surface. (OpenGL may do nearest neighbour instead, but I am not sure). This is good for flat surfaces (cubes...) since the normal should be the same over a surface and the calculation is kept simple.
+This would not be good for 3D meshes of cylinders or spheres. Even though the object may be made up of discrete surfaces, having a normal that smoothly changes over the surface would make the object look more realistic without having to change the number of polygons. This can be specified by:
+glShadeModel(GL_SMOOTH);
+As you can tell by the function name, this interpolation of normals is mainly done for shading since the influence of light is dependent on the surface normal.
+
+NOTE: As you transform the object, you want the normal to transform along with object. OpenGL takes care of this by applying any transformation you do to the object to its normals as well. The problem is that scaling will affect the magnitude of the normals. This is very bad for light intensity calculations. To keep the magnitude of the normal the same as the magnitude of the vector you put in for glNormal3f(nx,ny,nz), use:
+glEnable(GL_RESCALE_NORMAL);
+before applying any transformations. It is recommended that the normal you pass in to glNormal3f() have magnitude 1 (the unit normal) for simplest calculations.
+
+
+Light
+-----
+
+Light and colour is denoted by (R,G,B,a) -> (red,green,blue,opacity).
+A general 3D point in homogeneous coordinates is given by (x,y,z,1) or (cx,cy,cz,c).
+In OpenGL, points and colours like these are represented as an array of length 4 of GLfloat.
+For example, to define a position and a colour:
+GLfloat light_pos[] = {10,20,30,1};
+GLfloat hair_col[] = {1.0,0.2,1.0,1.0};
+This makes a point called light_pos with value (10,20,30) and a colour called hair_col with RGBa value of (1.0,0.2,1.0,1.0). Having none of a colour means a value of 0.0 and having all of a colour means a value of 1.0. Also, opaque has a value of 1.0 and completely transparent has a value of 0.0. The above colour is full red and full blue (purple) with a small amount of green. It is also opaque.
+
+To enable the use of lights and light calculation, use:
+glEnable(GL_LIGHTING);
+Lighting can be ignored by using:
+glDisable(GL_LIGHTING);
+If lighting is disabled, no lights or lighting effects will appear in the scene even if there is code for that.
+
+The old version of OpenGL (used for A1/A2) allows for the use of up to 8 lights. The individual lights can be turned on and off by:
+glEnable(x);
+glDisable(x);
+Where x can be GL_LIGHT0, GL_LIGHT1, ..., GL_LIGHT7 to reference each of the 8 lights. By default, all lights are disabled.
+
+Say that GL_LIGHT0 is on. To set its position, use:
+glLightfv(GL_LIGHT0,GL_POSITION,light_pos);
+The first parameter specifies which light to use. The second parameter specifies which attribute to change (you can change the light colour [GL_AMBIENT,GL_DIFFUSE,GL_SPECULAR] or turn it into a spotlight from here. The default light colour is white (1,1,1,1)). The third parameter is a GLfloat array of length 4 as defined above. For changing the position, this represents a homogeneous point, while for changing the colour, this represents a colour.
+
+
+Material Colour
+---------------
+
+This version of OpenGL uses the Phong reflection model to apply light to objects. OpenGL does the calculations for you but you have to specify the light position and colour (shown above), the surface normals (you specify the original normal, OpenGL then transforms the normal automatically), and the material properties (ambient, diffuse, and specular colour plus the shininess [the exponent of the specular term]).
+
+Specifying the material colour properties is similar to specifying the light properties. This is done by:
+glMaterialfv(GL_FRONT,property,col_vector);
+When dealing with closed 3D surfaces, there is no need to worry about the back of a surface since that will be inside the object where we shouldn't be anyway (so only GL_FRONT is used). The relevant properties that need to be set are GL_AMBIENT, GL_DIFFUSE, and GL_SPECULAR. You can also set the emissivity of an object here (for glowing objects). The last parameter specifies the colour just like last parameter in glLightfv.
+
+Since the shininess (exponent of the specular term) is just a scalar and not a vector, there is a separate function for that. That term is set by:
+glMaterialf(GL_FRONT,GL_SHININESS,value);
+This is the only property that can be changed by this function.
+
+
+References
+----------
+
+Please look up the relevant functions for more information on how to use them:
+
+http://www.opengl.org/sdk/docs/man2/xhtml/glNormal.xml
+http://www.opengl.org/sdk/docs/man2/xhtml/glShadeModel.xml
+http://www.opengl.org/sdk/docs/man/xhtml/glPolygonMode.xml
+
+http://www.opengl.org/sdk/docs/man2/xhtml/glLight.xml
+http://www.opengl.org/sdk/docs/man2/xhtml/glMaterial.xml

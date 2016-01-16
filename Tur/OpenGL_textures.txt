@@ -1,0 +1,103 @@
+Tutorial 6
+
+2D Textures in OpenGL
+=====================
+
+Through A1 and A2, you have seen how to make 2D and 3D objects with solid colours and material properties by manipulating light (Phong reflection model). Another way to display the objects is by adding texture to it. You can take a cube and make it look like different things just by applying different pictures to it (cardboard to make it look like a box, metal to make it look like a dumpster, brick to make it look like a building...). Things get more interesting when the object you're dealing with isn't a flat surface any longer or even a "regular" surface like a cylinder. Thankfully, OpenGL lets you texturize arbitrary surfaces relatively easily.
+
+Using textures is similar to using material properties for the Phong reflection model. Before creating an object, you specify the properties of the texture to be used, let OpenGL know you wish to use it when drawing surfaces, then draw your surfaces. When doing lighting, you specify the properties of the light(s) and material, let OpenGL know you wish to use it when drawing surfaces, then draw your surfaces.
+
+Creating a Texture Variable
+---------------------------
+
+OpenGL lets you "store" the textures you create so you don't have to set up new textures every time you draw different types of objects. This is done by:
+
+GLuint tex;
+glGenTextures(1,&tex);
+
+This makes one generic texture and says that "tex" is the variable referencing the texture. You can initialize "n" textures at once by replacing "1" with "n" and "&tex" with a pointer to a GLuint array of length n.
+
+To actually work with textures, you must work with a specific type of texture. For this note, we will be working with 2D textures. There are other types of textures, such as 1D and 3D textures and others. This is done by:
+
+glBindTexture(GL_TEXTURE_2D,tex);
+
+This will also make all subsequent changes to GL_TEXTURE_2D apply only to "tex" so you can  keep old textures while creating new ones.
+
+
+Setting the Texture
+-------------------
+
+Say we have a picture (like a picture of a brick wall) and want to make that be our texture. Let's assume that this image is 512 by 512 pixels and each pixel is represented by a red, green, blue, and opacity value (RGBA). Note that the height and width of the picture must be a power of 2. First, you would import the image so that it is in the format:
+
+GL_UNSIGNED_BYTE img[] = {R1,G1,B1,A1, R2,B2,B2,A2, ...};
+
+And then assign it to the 2D texture by:
+
+glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 512, 512, 0, GL_RGBA, GL_UNSIGNED_BYTE, img);
+
+Let's break this down to see what each thing does:
+glTexImage(
+  target texture - the type of texture we care about. We are working with GL_TEXTURE_2D,
+  level of detail - 0 is the base image. The image becomes more blurry for higher numbers,
+  format of the texture - what the format of each texture pixel is,
+  width - the width of image,
+  height - the height of the image,
+  border - a value that must be 0,
+  format - the format of a pixel of the input image (RED, RGB, RGBA, BGR, BGRA, ...),
+  type - the type of a pixel of the input image (UNSIGNED_BYTE, INT, FLOAT, ...),
+  data - the image that you want the texture to be);
+
+It may be the case that when we make our surface, we want the texture to tile across the surface. Right now, OpenGL doesn't know what to (or will do some default action) when we reference a point outside the texture coordinates. We can specify tiling to occur in both the x and y directions (OpenGL calls these the s and t directions in tile coordinates) by:
+
+glTexParameter(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+glTexParameter(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+
+Finally, we want OpenGL to acknowledge that we are using (2D) texturing by:
+
+glEnable(GL_TEXTURE_2D);
+
+
+Drawing Objects
+---------------
+
+We can now assign textures to surfaces in the same way we assign normals to surfaces. For every vertex we draw, we first assign a texture coordinate to it. Texture coordinates will range from 0 to 1, regardless of the size of the image used as the texture. Because we have tiling on, using a point outside of that range will essentially have its integer part thrown away (i.e. 1.45 becomes 0.45, -0.9 becomes 0.9). Say that we want our texture to fit exactly on some square. This is done by:
+
+glBegin(GL_QUADS);
+  // Bottom Left
+  glTexCoord2f(0,0);
+  glVertex3f(-2,-2,0);
+  // Bottom Right
+  glTexCoord2f(1,0);
+  glVertex3f(2,-2,0);
+  // Top Right
+  glTexCoord2f(1,1);
+  glVertex3f(2,2,0);
+  // Top Left
+  glTexCoord2f(0,1);
+  glVertex3f(-2,2,0);
+glEnd();
+
+If instead we wanted a 4 by 4 tiling of the texture, for the same vertices, we would have the following texture coordinates:
+
+glTexCoord2f(0,0);
+glTexCoord2f(4,0);
+glTexCoord2f(4,4);
+glTexCoord2f(0,4);
+
+
+References
+----------
+
+Please look up the relevant functions for more information on how to use them:
+
+http://www.opengl.org/sdk/docs/man/xhtml/glGenTextures.xml
+http://www.opengl.org/sdk/docs/man/xhtml/glBindTexture.xml
+http://www.opengl.org/sdk/docs/man/xhtml/glTexImage2D.xml
+http://www.opengl.org/sdk/docs/man/xhtml/glTexParameter.xml
+http://www.opengl.org/sdk/docs/man2/xhtml/glTexCoord.xml
+
+Another OpenGL Texture Mapping Tutorial:
+
+http://www.cse.msu.edu/~cse872/tutorial4.html
+
+Special thanks to Xavier Snelgrove for the original texture mapping code.

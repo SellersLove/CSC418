@@ -1,0 +1,232 @@
+\RequirePackage[l2tabu,orthodox]{nag}  % warn about common LaTeX pitfalls
+\RequirePackage[ascii]{inputenc}  % input is 7-bit ASCII
+\RequirePackage{fixltx2e}  % fix LaTeX2e kernel bugs
+
+\documentclass[11pt,twoside]{article}
+\usepackage{color}
+\usepackage{graphicx}
+\graphicspath{ {image/} }
+\usepackage{calc}  % arithmetic in length parameters
+\usepackage{enumitem}  % more control over list formatting
+\usepackage{fancyhdr}  % simpler headers and footers
+\usepackage[margin=1in]{geometry}  % page layout
+\usepackage{lastpage}  % for last page number
+\usepackage{relsize}  % easier font size changes
+\usepackage[normalem]{ulem}  % smarter underlining
+\usepackage{url}  % verb-like typesetting of URLs
+\usepackage{xfrac}  % nicer looking simple fractions for text and math
+\usepackage{longtable}
+\usepackage{tikz}
+\usepackage{array}
+\usepackage{tikz-timing}
+\usetikzlibrary{arrows, shapes, backgrounds,fit}
+\usepackage{tkz-graph}
+% Set up fonts.
+\usepackage[T1]{fontenc}  % use true 8-bit fonts
+\usepackage{slantsc}  % allow slanted small-caps
+\usepackage{microtype}  % perform various font optimizations
+% Use Palatino-based monospace instead of kpfonts' default.
+%\usepackage{newpxtext}
+\ttfamily
+\DeclareFontShape{T1}{\ttdefault}{m}{scsl}{<->ssub*\ttdefault/m/sc}{}
+\DeclareFontShape{T1}{\ttdefault}{b}{scsl}{<->ssub*\ttdefault/b/sc}{}
+% "Kepler" fonts.
+\usepackage[nott,notextcomp]{kpfonts}
+% Use curvier Latin Modern brackets instead of kpfonts' glyphs.
+\DeclareSymbolFont{lmsymb}     {OMS}{lmsy}{m}{n}
+\DeclareSymbolFont{lmlargesymb}{OMX}{lmex}{m}{n}
+\DeclareMathDelimiter{\rbrace}{\mathclose}{lmsymb}{"67}{lmlargesymb}{"09}
+\DeclareMathDelimiter{\lbrace}{\mathopen}{lmsymb}{"66}{lmlargesymb}{"08}
+
+% Page layout: stretch text to fill up page.
+\addtolength\footskip{.25\headheight}
+\flushbottom
+
+% Common list settings.
+
+% Common macros.
+\input{macros}
+\newcommand*\st{\mathrel{|}}  % "such that" for set extension
+
+% Headings.
+\pagestyle{fancy}
+\let\headrule\empty
+\let\footrule\empty
+\lhead{CSC\,418\,H1}
+\chead{\large\scshape Assignment \#\,2}
+\rhead{\scshape Fall 2015}
+\lfoot{\scshape Dept.\@ of Computer Science, University of Toronto,
+       St.~George Campus}
+\cfoot{}
+\rfoot{\scshape page \thepage\space of \pageref{LastPage}}
+
+
+\begin{document}
+
+\begin{enumerate}[leftmargin=0pt]
+%question 1
+\item Transformation
+	\begin{enumerate}
+	\item We know that an affine transformation has the form
+				 \[ \left. \begin{bmatrix}
+					A & t \\
+					0 \ 0 & 1
+				\end{bmatrix} \right. \] 
+		Now suppose the affine transformation is
+				 \[ \left. \begin{bmatrix}
+					a &b& x\\
+					c &d& y \\
+					0 &0 & 1
+				\end{bmatrix} \right. \] 
+		Then we plug in those points and get 6 equation:
+				\[2a+3b+x = 8\]
+				\[2c+3d+y = -4\]
+				\[a+2b+x = 2\]
+				\[c+2d+y = 0\]
+				\[3a-b+x = 10\]
+				\[3c-d+y = 8\]
+		After solving this linear equation we have:
+				\[ \left. \begin{bmatrix}
+					5.2 &0.8& -4.8\\
+					-0.8 &-3.2& 7.2 \\
+					0 &0 & 1
+				\end{bmatrix} \right. \] 
+	\item There are 8 variables for a 2D-Homography; hence, we need 8 points which means 4 maps to 4.\\
+		There are 3 variables for a 2D-rigid transform; hence, we need 4 points which means 2 maps to 2.
+	\item Both centroid and ortho-center are preserved under affine transformation due the the similarly triangle.\\
+	centroid:
+	\begin{itemize}[label = {}]
+	\item Suppose after an affine transformation a triangle $\Delta ABC$ maps to  $\Delta A'B'C'$. And the centroid $O$ maps to $O'$.
+	\item Now, connect  $AO$ and $A'O'$. Suppose line $AO$ intersects $BC$ at $D$ and  $A'O'$ intersects $B'C'$ at $D'$. Clearly  triangle $\Delta ADC$ and $\Delta A'D'C'$ are similarly triangles; hence $D'$ is also the mid-point of $B'C'$.
+	\item similarly, we can get $O'$ is the centroid  of $\Delta A'B'C'$.
+	\end{itemize}
+	ortho-center:
+	\begin{itemize}[label = {}]
+	\item Suppose after an affine transformation a triangle $\Delta ABC$ maps to  $\Delta A'B'C'$. And the ortho-center $O$ maps to $O'$.
+	\item Now, connect  $AO$ and $A'O'$. Suppose line $AO$ intersects $BC$ at $D$ and  $A'O'$ intersects $B'C'$ at $D'$. Clearly  triangle $\Delta ADC$ and $\Delta A'D'C'$ are similarly triangles; hence $A'D'$ is also the perpendicular to $B'C'$.
+	\item similarly, we can get $O'$ is the ortho-center  of $\Delta A'B'C'$.
+	\end{itemize}
+	\end{enumerate}
+%question 2
+\item Viewing and Projection
+ \begin{enumerate}
+ \item The function of a real camera would be a complicated function about light, distance etc. \\
+ The focal length of the lens is the distance between the lens and the image sensor when the subject is in focus. Smaller focal length would give a broader image view.\\
+ Aperture is  an opening through which light travels size of the aperture has a direct impact on the depth of field.
+ A smaller aperture will bring all foreground and background objects in focus, while a large aperture will isolate the foreground from the background by making the foreground objects sharp and the background blurry. \item camera position $e(2,1,3)$, look at point $p(-1,2,1)$, and up vector $\vec r(0,1,0)$.
+ 	Then we have,
+			\[\vec s = \frac{p-e}{|| p -e|| }= (\frac{-3}{\sqrt{14}},\frac{1}{\sqrt{14}},\frac{-2}{\sqrt{14}})\]
+			\[\vec u = \frac{\vec r \times \vec s}{||\vec r \times \vec s||} = (\frac{-2}{\sqrt{13}},0,\frac{3}{\sqrt{13}})\]
+			\[\vec v = \frac{\vec r \times \vec u}{||\vec r \times \vec u||} = (\frac{3}{\sqrt{182}},\frac{13}{\sqrt{182}},\frac{2}{\sqrt{182}})\]
+			%\[\vec v = \frac{\vec r \times \vec u}{||\vec r \times \vec u||} = (\frac{-2}{\sqrt{182}},\farc{13}{\sqrt{182}},\frac{2}{\sqrt{182}})\]
+	Then we have,
+			    \[ M_{cw} = \left. \begin{bmatrix}
+					\frac{-2}{\sqrt{13}}&\frac{3}{\sqrt{182}}&\frac{-3}{\sqrt{14}}&2\\
+					0&\frac{13}{\sqrt{182}}&\frac{1}{\sqrt{14}}&1\\
+					\frac{3}{\sqrt{13}}&\frac{2}{\sqrt{182}}&\frac{-2}{\sqrt{14}}&3\\
+					0 &0 & 0& 1
+				\end{bmatrix} \right. \] 
+	Then 
+			 \[ M_{wc} = M^{-1}_{cw} = \left. \begin{bmatrix}
+					\frac{-2}{\sqrt{13}}&0&\frac{3}{\sqrt{13}}&\frac{5}{\sqrt{13}}\\
+					\frac{3}{\sqrt{182}}&\frac{13}{\sqrt{182}}&\frac{2}{\sqrt{182}}&\frac{22}{\sqrt{182}}\\
+					\frac{-3}{\sqrt{14}}&\frac{1}{\sqrt{14}}&\frac{-2}{\sqrt{14}}&\frac{1}{\sqrt{14}}\\
+					0 &0 & 0& 1
+				\end{bmatrix} \right. \] 
+ \item From perspective projection we could get, \[(\frac{dp_x}{p_z},\frac{dp_y}{p_z})\]
+ \item Suppose the line function is $l(\lambda) = (a+\lambda b_x, d+\lambda b_y, c+\lambda b_z)$.\\
+	 Then the 2D-point of any point point on this line would be,
+ 		\[ (\frac{d(a+\lambda b_x)}{c+\lambda b_z}, \frac{d(d+\lambda b_y)}{c+\lambda b_z})\]
+	As $\lambda$ goes to infinite we get $(\frac{db_x}{b_z},\frac{db_y}{b_z})$, which means the points converge to $(\frac{db_x}{b_z},\frac{db_y}{b_z})$.
+  \end{enumerate}
+%question 3
+\item Surfaces
+    \begin{enumerate}
+    \item  At any point $p=(x,y,z)$, normal is $(\frac{df}{dx}, \frac{df}{dy} ,\frac{df}{dz})$.
+    	Then we have,
+    			\[ \frac{df}{dx} = 2x-\frac{2Rx}{\sqrt{x^2+y^2}}\]
+    			\[ \frac{df}{dy} = 2y-\frac{2Ry}{\sqrt{x^2+y^2}}\]
+    			\[ \frac{df}{dz} = 2z\]
+    \item Suppose the function for the tangent plane at point $p$ is $t(q)$ where $q$ is the any point on this tangent plane, then we have,
+    			\[t(q)=  \ (q-p)normal_p = 0, \ where \ normal_p  stands \ for \ the \ normal \ vector\ at \ the \ point \ p   \]
+    \item Substitute the parametric curve $q(\lambda) = (R\cos\lambda, R\sin\lambda, r)$ into the surface function and we have,
+    			\[(R-\sqrt{(R\cos\lambda)^2+(R\cos\lambda)^2})^2 + r^2-r^2 \]
+			\[= (R-\sqrt{R^2})^2 + 0 \]
+			\[= 0 \]
+	Hence, parametric curve is on the surface.
+  \item the tangent vector for  $q(\lambda) $ is $(\frac{dx}{d\lambda}, \frac{dx}{d\lambda}, z )$; therefore we have the tangent vector,
+  			\[(-R\sin\lambda, R\cos\lambda, r ) \]
+	for any point on curve $q(\lambda) $.
+  \item First we know that the normal vector for any point at plane is,
+  			\[(2R-\frac{2R^2(\cos(\lambda))}{R}, 2R-\frac{2R^2(\sin(\lambda))}{R}, 2r)\] 
+	 \ \ \ \ \ \ \ which is,
+	 		\[(0, 0, 2r)\] 
+	   And from $b$ we know that for any point $q$, if its tangent vector $(x,y,z)$ lie on the tangent plane, we will have,
+	   		\[ 0(x-R\cos\lambda)+0(y-R\sin\lambda) +2r(z-r) = 0\]
+	\ \ \ \ \ \ \ which is,
+	 		\[rz-z^2 = 0\] 
+	Now from $(d)$ we have that the tangent vector for any point at the curve $p(\lambda)$ is $(-R\sin\lambda, R\cos\lambda, r ) $.\\
+	Then we substitute this into $rz-z^2 = 0$, and we have,
+			\[r^2-r^2=0\]
+			Hence, the this tangent vector of $q(\lambda)$ does lie the the tangent plane.	
+    \end{enumerate}
+\item
+ \begin{enumerate}
+	\item It is possible to exclude things, for instance  it is possible to  exclude  $d$, $d$  might be blocked by $c$ and it is pointing aways from the general camera view.
+	\item  
+                   \[ \begin{tikzpicture}[scale=0.2]
+                    \tikzstyle{every node}+=[inner sep=0pt]
+                    \draw [black] (38.2,-5.5) circle (3);
+                    \draw (38.2,-5.5) node {$h$};
+                    \draw [black] (29.9,-14.3) circle (3);
+                    \draw (29.9,-14.3) node {$c$};
+                    \draw [black] (46.7,-13.5) circle (3);
+                    \draw (46.7,-13.5) node {$a$};
+                    \draw [black] (22.3,-23) circle (3);
+                    \draw (22.3,-23) node {$d$};
+                    \draw [black] (14.3,-32.9) circle (3);
+                    \draw (14.3,-32.9) node {$e$};
+                    \draw [black] (37.6,-23) circle (3);
+                    \draw (37.6,-23) node {$g$};
+                    \draw [black] (44.5,-31.5) circle (3);
+                    \draw (44.5,-31.5) node {$b$};
+                    \draw [black] (34.8,-39.6) circle (3);
+                    \draw (34.8,-39.6) node {$l$};
+                    \draw [black] (55.4,-22.1) circle (3);
+                    \draw (55.4,-22.1) node {$f$};
+                    \draw [black] (36.14,-7.68) -- (31.96,-12.12);
+                    \fill [black] (31.96,-12.12) -- (32.87,-11.88) -- (32.14,-11.19);
+                    \draw [black] (27.93,-16.56) -- (24.27,-20.74);
+                    \fill [black] (24.27,-20.74) -- (25.18,-20.47) -- (24.42,-19.81);
+                    \draw [black] (31.89,-16.55) -- (35.61,-20.75);
+                    \fill [black] (35.61,-20.75) -- (35.46,-19.82) -- (34.71,-20.49);
+                    \draw [black] (20.41,-25.33) -- (16.19,-30.57);
+                    \fill [black] (16.19,-30.57) -- (17.08,-30.26) -- (16.3,-29.63);
+                    \draw [black] (39.49,-25.33) -- (42.61,-29.17);
+                    \fill [black] (42.61,-29.17) -- (42.49,-28.23) -- (41.72,-28.86);
+                    \draw [black] (42.2,-33.42) -- (37.1,-37.68);
+                    \fill [black] (37.1,-37.68) -- (38.04,-37.55) -- (37.4,-36.78);
+                    \draw [black] (48.83,-15.61) -- (53.27,-19.99);
+                    \fill [black] (53.27,-19.99) -- (53.05,-19.07) -- (52.35,-19.78);
+                    \draw [black] (40.38,-7.56) -- (44.52,-11.44);
+                    \fill [black] (44.52,-11.44) -- (44.28,-10.53) -- (43.59,-11.26);
+                    \end{tikzpicture} \]
+          \item We based on the rule that if $eye$ is outside a face $i$ 
+          	\begin{itemize}
+		\item draw everything inside $i$
+		\item draw $i$
+		\item draw everything out side $i$
+		\end{itemize}
+		 if $eye$ is inside a face $i$ 
+          	\begin{itemize}
+		\item draw everything outside $i$
+		\item draw $i$
+		\item draw everything inside $i$
+		\end{itemize}
+		Hence, we would get, 
+          $[\ a,\ f,\ h,\ d,\ e,\ c,\ b,\ l, \ g,]$
+         \end{enumerate}
+         	
+\end{enumerate}
+
+\end{document}
